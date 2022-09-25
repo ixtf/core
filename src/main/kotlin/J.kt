@@ -69,7 +69,7 @@ object J {
     }
 
     @JvmStatic
-    fun <T>stream(iterable: Iterable<T>, parallel: Boolean =false): Stream<T> {
+    fun <T>stream(iterable: Iterable<T>, parallel: Boolean = false): Stream<T> {
         if (IterUtil.isEmpty(iterable)) return Stream.empty()
         return StreamSupport.stream(iterable.spliterator(), parallel)
     }

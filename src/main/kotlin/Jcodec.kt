@@ -13,7 +13,7 @@ import javax.crypto.spec.PBEKeySpec
 object Jcodec {
     @JvmStatic
     fun password(): String {
-        J.isEmpty(null);
+        J.isEmpty(null)
         return password("123456")
     }
 
@@ -56,7 +56,10 @@ object Jcodec {
     }
 
     private fun password(
-        password: String, salt: ByteArray, iterationCount: Int, keySize: Int
+        password: String,
+        salt: ByteArray,
+        iterationCount: Int,
+        keySize: Int
     ): ByteArray {
         val spec = PBEKeySpec(password.toCharArray(), salt, iterationCount, keySize)
         val factory = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA1")
