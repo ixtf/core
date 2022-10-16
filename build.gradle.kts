@@ -1,7 +1,7 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-    kotlin("jvm") version "1.7.0"
+    kotlin("jvm") version "1.7.20"
     id("com.diffplug.spotless") version "6.11.0"
 }
 
@@ -25,17 +25,26 @@ dependencies {
     testImplementation(kotlin("test"))
 }
 
+
 spotless {
     java {
-        googleJavaFormat("1.15.0")
-        formatAnnotations()
         target("**/java/**")
         targetExclude("**/generated/**")
+        googleJavaFormat()
+        formatAnnotations()
     }
     kotlin {
-        ktlint("0.47.1")
         target("**/kotlin/**")
         targetExclude("**/generated/**")
+        ktfmt()
+    }
+    kotlinGradle {
+        target("*.gradle.kts", "additionalScripts/*.gradle.kts")
+        ktfmt()
+    }
+    format("styling") {
+        target("**/graphql/**")
+        prettier()
     }
 }
 
