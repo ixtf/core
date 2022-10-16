@@ -6,7 +6,6 @@ import cn.hutool.core.lang.UUID;
 import cn.hutool.core.util.IdUtil;
 import cn.hutool.crypto.digest.DigestUtil;
 import cn.hutool.crypto.digest.SM3;
-import com.gitee.ixtf.J;
 import com.gitee.ixtf.Jcodec;
 import java.nio.ByteBuffer;
 import java.nio.charset.StandardCharsets;
