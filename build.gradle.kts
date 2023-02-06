@@ -1,13 +1,25 @@
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
-
 plugins {
-  kotlin("jvm") version "1.7.20"
-  id("com.diffplug.spotless") version "6.11.0"
+  idea
+  kotlin("jvm") version "1.8.0"
+  id("com.diffplug.spotless")
+  `java-library`
+  `maven-publish`
 }
 
 group = "com.gitee.ixtf"
 
 version = "1.0.0"
+
+java {
+  toolchain { languageVersion.set(JavaLanguageVersion.of(17)) }
+  withJavadocJar()
+  withSourcesJar()
+}
+
+tasks.wrapper {
+  gradleVersion = "7.6"
+  distributionType = Wrapper.DistributionType.ALL
+}
 
 repositories {
   mavenLocal()
@@ -18,12 +30,39 @@ repositories {
 }
 
 dependencies {
-  implementation(enforcedPlatform("com.gitee.ixtf:bom:${properties["bomVersion"]}"))
+  api(platform("com.gitee.ixtf:bom:${properties["bomVersion"]}"))
   api("cn.hutool:hutool-core")
   api("cn.hutool:hutool-system")
   api("cn.hutool:hutool-crypto")
+  api("org.bouncycastle:bcprov-jdk15on")
+  api("org.hibernate.validator:hibernate-validator")
+  api("com.fasterxml.jackson.datatype:jackson-datatype-jsr310")
+  api("com.fasterxml.jackson.datatype:jackson-datatype-jdk8")
+  api("com.fasterxml.jackson.module:jackson-module-parameter-names")
+  api("com.fasterxml.jackson.module:jackson-module-kotlin")
+  api("com.fasterxml.jackson.dataformat:jackson-dataformat-yaml")
+  api("com.fasterxml.jackson.dataformat:jackson-dataformat-toml")
+  api("ch.qos.logback:logback-classic")
+  api("io.github.classgraph:classgraph")
+  api("com.github.ben-manes.caffeine:caffeine")
 
+  api("io.smallrye.config:smallrye-config:3.1.1")
+
+  testImplementation("org.junit.jupiter:junit-jupiter-api:5.9.0")
+  testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.9.0")
   testImplementation(kotlin("test"))
+}
+
+publishing {
+  publications {
+    create<MavenPublication>("mavenJava") {
+      from(components["java"])
+      versionMapping {
+        usage("java-api") { fromResolutionOf("runtimeClasspath") }
+        usage("java-runtime") { fromResolutionResult() }
+      }
+    }
+  }
 }
 
 spotless {
@@ -47,7 +86,3 @@ spotless {
     prettier()
   }
 }
-
-tasks.test { useJUnitPlatform() }
-
-tasks.withType<KotlinCompile> { kotlinOptions.jvmTarget = "17" }
