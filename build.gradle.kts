@@ -53,7 +53,7 @@ dependencies {
 
 publishing {
   publications {
-    create<MavenPublication>("maven") {
+    create<MavenPublication>("mavenJava") {
       from(components["java"])
       //      val archives by configurations
       //      setArtifacts(archives.artifacts)
