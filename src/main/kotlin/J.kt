@@ -99,8 +99,8 @@ object J {
   @JvmStatic fun <T> readJsonFile(s: String, ref: TypeReference<T>): T = readJson(file(s), ref)
   @JvmStatic
   fun writeJson(file: File, o: Any) {
-      FileUtil.mkParentDirs(file)
-      objectMap(file).writerWithDefaultPrettyPrinter().writeValue(file, o)
+    FileUtil.mkParentDirs(file)
+    objectMap(file).writerWithDefaultPrettyPrinter().writeValue(file, o)
   }
   @JvmStatic fun writeJson(s: String, o: Any) = writeJson(file(s), o)
   @JvmStatic fun file(vararg path: String): File = FileUtil.file(*path)
