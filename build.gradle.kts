@@ -55,8 +55,10 @@ dependencies {
 
 publishing {
   publications {
-    create<MavenPublication>("mavenJava") {
+    create<MavenPublication>("maven") {
       from(components["java"])
+      //      val archives by configurations
+      //      setArtifacts(archives.artifacts)
       versionMapping {
         usage("java-api") { fromResolutionOf("runtimeClasspath") }
         usage("java-runtime") { fromResolutionResult() }

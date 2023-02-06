@@ -48,7 +48,21 @@ fun Date.lt(): LocalTime = ldt().toLocalTime()
 object J {
   @JvmStatic fun mainName(file: File): String = FileUtil.mainName(file)
   @JvmStatic fun mainName(fileName: String): String = FileUtil.mainName(fileName)
+  /**
+   * 获取文件扩展名（后缀名），扩展名不带“.”
+   *
+   * @param file 文件
+   * @return 扩展名
+   * @see FileUtil.extName(File)
+   */
   @JvmStatic fun extName(file: File): String = FileUtil.extName(file)
+  /**
+   * 获得文件的扩展名（后缀名），扩展名不带“.”
+   *
+   * @param fileName 文件名
+   * @return 扩展名
+   * @see FileUtil.extName(String)
+   */
   @JvmStatic fun extName(fileName: String): String = FileUtil.extName(fileName)
   @JvmStatic
   fun objectMap(fileName: String): ObjectMapper =
@@ -98,10 +112,11 @@ object J {
   @JvmStatic fun <T> readJsonFile(s: String, type: Class<T>) = readJson(file(s), type)
   @JvmStatic fun <T> readJsonFile(s: String, ref: TypeReference<T>): T = readJson(file(s), ref)
   @JvmStatic
-  fun writeJson(file: File, o: Any) {
-    FileUtil.mkParentDirs(file)
-    objectMap(file).writerWithDefaultPrettyPrinter().writeValue(file, o)
-  }
+  fun writeJson(file: File, o: Any) =
+      file.apply {
+        FileUtil.mkParentDirs(this)
+        objectMap(this).writerWithDefaultPrettyPrinter().writeValue(this, o)
+      }
   @JvmStatic fun writeJson(s: String, o: Any) = writeJson(file(s), o)
   @JvmStatic fun file(vararg path: String): File = FileUtil.file(*path)
   @JvmStatic
