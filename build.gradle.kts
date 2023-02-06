@@ -1,6 +1,6 @@
 plugins {
   idea
-  kotlin("jvm") version "1.8.0"
+  kotlin("jvm") version "1.8.10"
   id("com.diffplug.spotless")
   `java-library`
   `maven-publish`
@@ -45,8 +45,6 @@ dependencies {
   api("ch.qos.logback:logback-classic")
   api("io.github.classgraph:classgraph")
   api("com.github.ben-manes.caffeine:caffeine")
-
-  api("io.smallrye.config:smallrye-config:3.1.1")
 
   testImplementation("org.junit.jupiter:junit-jupiter-api:5.9.0")
   testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.9.0")

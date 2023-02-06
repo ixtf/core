@@ -5,7 +5,7 @@ import org.junit.jupiter.api.Test;
 
 public class TestIo {
   @Test
-   void testFile() {
+  void testFile() {
     System.out.println(J.mainName("sdfadfas.json"));
     //    MAPPER.readValue()
   }
