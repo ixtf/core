@@ -31,7 +31,7 @@ inline fun <reified T> readJson(bytes: ByteArray) = MAPPER.readValue<T>(bytes)
 
 inline fun <reified T> readJson(json: String) = MAPPER.readValue<T>(json)
 
-inline fun <reified T> readJson(file: File) = MAPPER.readValue<T>(file)
+inline fun <reified T> readJson(file: File) = J.objectMap(file).readValue<T>(file)
 
 inline fun <reified T> readJsonFile(vararg path: String) = readJson<T>(J.file(*path))
 
