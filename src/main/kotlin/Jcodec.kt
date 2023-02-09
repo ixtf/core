@@ -13,7 +13,6 @@ import javax.crypto.spec.PBEKeySpec
 object Jcodec {
   @JvmStatic
   fun password(): String {
-    J.isEmpty(null)
     return password("123456")
   }
 

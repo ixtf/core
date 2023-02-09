@@ -34,6 +34,7 @@ dependencies {
   api("cn.hutool:hutool-core")
   api("cn.hutool:hutool-system")
   api("cn.hutool:hutool-crypto")
+  api("cn.hutool:hutool-jwt")
   api("org.bouncycastle:bcprov-jdk15on")
   api("org.hibernate.validator:hibernate-validator")
   api("com.fasterxml.jackson.datatype:jackson-datatype-jsr310")

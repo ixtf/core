@@ -5,7 +5,9 @@ import cn.hutool.core.collection.CollUtil
 import cn.hutool.core.collection.IterUtil
 import cn.hutool.core.date.DateUtil
 import cn.hutool.core.io.FileUtil
+import cn.hutool.core.util.ArrayUtil
 import cn.hutool.core.util.IdUtil
+import cn.hutool.core.util.StrUtil
 import cn.hutool.crypto.digest.DigestUtil
 import com.fasterxml.jackson.core.type.TypeReference
 import com.fasterxml.jackson.databind.JsonNode
@@ -148,6 +150,11 @@ object J {
   @JvmStatic fun ld(date: Date) = date.ld()
 
   @JvmStatic fun lt(date: Date) = date.lt()
+  @JvmStatic fun isBlank(str: CharSequence) = StrUtil.isBlank(str)
+  @JvmStatic fun nonBlank(str: CharSequence) = !isBlank(str)
+  @JvmStatic
+  fun blankToDefault(str: CharSequence, defaultStr: String): String =
+      StrUtil.blankToDefault(str, defaultStr)
 
   /**
    * 集合是否为空
@@ -156,17 +163,21 @@ object J {
    * @return 是否为空
    */
   @JvmStatic fun isEmpty(collection: Collection<*>?) = CollUtil.isEmpty(collection)
+  @JvmStatic fun isEmpty(iterable: Iterable<*>?) = IterUtil.isEmpty(iterable)
+  @JvmStatic fun isEmpty(array: Array<*>?) = ArrayUtil.isEmpty(array)
 
   @JvmStatic fun nonEmpty(collection: Collection<*>?) = CollUtil.isNotEmpty(collection)
+  @JvmStatic fun nonEmpty(iterable: Iterable<*>?) = IterUtil.isNotEmpty(iterable)
+  @JvmStatic fun nonEmpty(array: Array<*>?) = ArrayUtil.isNotEmpty(array)
+  @JvmStatic fun <T> emptyToNull(list: List<T>?): List<T>? = if (nonEmpty(list)) list else null
 
-  @JvmStatic fun <T> emptyIfNull(collection: List<T>?): List<T> = CollUtil.emptyIfNull(collection)
+  @JvmStatic fun <T> emptyToNull(set: Set<T>?): Set<T>? = if (nonEmpty(set)) set else null
 
-  @JvmStatic fun <T> emptyIfNull(collection: Set<T>?): Set<T> = CollUtil.emptyIfNull(collection)
-
+  @JvmStatic fun <T> stream(iterable: Iterable<T>?) = stream(iterable, false)
   @JvmStatic
-  fun <T> stream(iterable: Iterable<T>, parallel: Boolean = false): Stream<T> =
+  fun <T> stream(iterable: Iterable<T>?, parallel: Boolean = false): Stream<T> =
       if (IterUtil.isEmpty(iterable)) Stream.empty()
-      else StreamSupport.stream(iterable.spliterator(), parallel)
+      else StreamSupport.stream(iterable!!.spliterator(), parallel)
   @JvmStatic fun sha256Hex(file: File) = file.sha256Hex()
   @JvmStatic fun sm3Hex(file: File) = file.sm3Hex()
 }
