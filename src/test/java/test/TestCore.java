@@ -7,6 +7,8 @@ import com.gitee.ixtf.J;
 import jakarta.validation.ConstraintViolationException;
 import org.junit.jupiter.api.Test;
 
+import java.util.Collection;
+
 public class TestCore {
   @Test
   void testLocalIp() {

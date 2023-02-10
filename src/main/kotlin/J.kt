@@ -29,13 +29,13 @@ import java.util.*
 import java.util.stream.Stream
 import java.util.stream.StreamSupport
 
-inline fun <reified T> readJson(bytes: ByteArray) = MAPPER.readValue<T>(bytes)
+inline fun <reified T> readJson(o: ByteArray) = MAPPER.readValue<T>(o)
 
-inline fun <reified T> readJson(json: String) = MAPPER.readValue<T>(json)
+inline fun <reified T> readJson(o: String) = MAPPER.readValue<T>(o)
 
-inline fun <reified T> readJson(file: File) = J.objectMap(file).readValue<T>(file)
+inline fun <reified T> readJson(o: File) = J.objectMap(o).readValue<T>(o)
 
-inline fun <reified T> readJsonFile(vararg path: String) = readJson<T>(J.file(*path))
+inline fun <reified T> readJsonFile(vararg o: String) = readJson<T>(J.file(*o))
 
 fun File.sha256Hex(): String = DigestUtil.sha256Hex(this)
 
@@ -48,33 +48,33 @@ fun Date.ld(): LocalDate = ldt().toLocalDate()
 fun Date.lt(): LocalTime = ldt().toLocalTime()
 
 object J {
-  @JvmStatic fun mainName(file: File): String = FileUtil.mainName(file)
-  @JvmStatic fun mainName(fileName: String): String = FileUtil.mainName(fileName)
+  @JvmStatic fun mainName(o: File): String = FileUtil.mainName(o)
+  @JvmStatic fun mainName(o: String): String = FileUtil.mainName(o)
   /**
    * 获取文件扩展名（后缀名），扩展名不带“.”
    *
-   * @param file 文件
+   * @param o 文件
    * @return 扩展名
    * @see FileUtil.extName(File)
    */
-  @JvmStatic fun extName(file: File): String = FileUtil.extName(file)
+  @JvmStatic fun extName(o: File): String = FileUtil.extName(o)
   /**
    * 获得文件的扩展名（后缀名），扩展名不带“.”
    *
-   * @param fileName 文件名
+   * @param o 文件名
    * @return 扩展名
    * @see FileUtil.extName(String)
    */
-  @JvmStatic fun extName(fileName: String): String = FileUtil.extName(fileName)
+  @JvmStatic fun extName(o: String): String = FileUtil.extName(o)
   @JvmStatic
-  fun objectMap(fileName: String): ObjectMapper =
-      when (extName(fileName).lowercase()) {
+  fun objectMap(o: String): ObjectMapper =
+      when (extName(o).lowercase()) {
         "yml",
         "yaml" -> YAML_MAPPER
         "toml" -> TOML_MAPPER
         else -> MAPPER
       }
-  @JvmStatic fun objectMap(file: File): ObjectMapper = objectMap(file.name)
+  @JvmStatic fun objectMap(o: File): ObjectMapper = objectMap(o.name)
   @JvmStatic
   fun localIp(): String =
       DatagramSocket().use {
@@ -82,37 +82,37 @@ object J {
         it.localAddress.hostAddress
       }
   @JvmStatic
-  fun <T> checkAndGetCommand(command: T): T =
-      command.apply {
-        val violations = VALIDATOR.validate(command)
+  fun <T> checkAndGetCommand(o: T): T =
+      o.apply {
+        val violations = VALIDATOR.validate(o)
         if (violations.isNotEmpty()) throw ConstraintViolationException(violations)
       }
   @JvmStatic
-  fun <T> checkAndGetCommand(bytes: ByteArray, type: Class<T>): T =
-      checkAndGetCommand(readJson(bytes, type))
+  fun <T> checkAndGetCommand(o: ByteArray, type: Class<T>): T =
+      checkAndGetCommand(readJson(o, type))
   @JvmStatic
-  fun <T> checkAndGetCommand(json: String, type: Class<T>): T =
-      checkAndGetCommand(readJson(json, type))
+  fun <T> checkAndGetCommand(o: String, type: Class<T>): T =
+      checkAndGetCommand(readJson(o, type))
   @JvmStatic
-  fun <T> checkAndGetCommand(file: File, type: Class<T>): T =
-      checkAndGetCommand(readJson(file, type))
+  fun <T> checkAndGetCommand(o: File, type: Class<T>): T =
+      checkAndGetCommand(readJson(o, type))
 
   @JvmStatic fun objectNode(): ObjectNode = JsonNodeFactory.instance.objectNode()
   @JvmStatic fun arrayNode(): ArrayNode = JsonNodeFactory.instance.arrayNode()
-  @JvmStatic fun readJson(bytes: ByteArray): JsonNode = MAPPER.readTree(bytes)
-  @JvmStatic fun <T> readJson(bytes: ByteArray, type: Class<T>): T = MAPPER.readValue(bytes, type)
+  @JvmStatic fun readJson(o: ByteArray): JsonNode = MAPPER.readTree(o)
+  @JvmStatic fun <T> readJson(o: ByteArray, type: Class<T>): T = MAPPER.readValue(o, type)
   @JvmStatic
-  fun <T> readJson(bytes: ByteArray, ref: TypeReference<T>): T = MAPPER.readValue(bytes, ref)
-  @JvmStatic fun readJson(json: String): JsonNode = MAPPER.readTree(json)
-  @JvmStatic fun <T> readJson(json: String, type: Class<T>): T = MAPPER.readValue(json, type)
-  @JvmStatic fun <T> readJson(json: String, ref: TypeReference<T>): T = MAPPER.readValue(json, ref)
-  @JvmStatic fun readJson(file: File): JsonNode = objectMap(file).readTree(file)
-  @JvmStatic fun <T> readJson(file: File, type: Class<T>): T = objectMap(file).readValue(file, type)
+  fun <T> readJson(o: ByteArray, ref: TypeReference<T>): T = MAPPER.readValue(o, ref)
+  @JvmStatic fun readJson(o: String): JsonNode = MAPPER.readTree(o)
+  @JvmStatic fun <T> readJson(o: String, type: Class<T>): T = MAPPER.readValue(o, type)
+  @JvmStatic fun <T> readJson(o: String, ref: TypeReference<T>): T = MAPPER.readValue(o, ref)
+  @JvmStatic fun readJson(o: File): JsonNode = objectMap(o).readTree(o)
+  @JvmStatic fun <T> readJson(o: File, type: Class<T>): T = objectMap(o).readValue(o, type)
   @JvmStatic
-  fun <T> readJson(file: File, ref: TypeReference<T>): T = objectMap(file).readValue(file, ref)
-  @JvmStatic fun readJsonFile(s: String) = readJson(file(s))
-  @JvmStatic fun <T> readJsonFile(s: String, type: Class<T>) = readJson(file(s), type)
-  @JvmStatic fun <T> readJsonFile(s: String, ref: TypeReference<T>): T = readJson(file(s), ref)
+  fun <T> readJson(o: File, ref: TypeReference<T>): T = objectMap(o).readValue(o, ref)
+  @JvmStatic fun readJsonFile(o: String) = readJson(file(o))
+  @JvmStatic fun <T> readJsonFile(o: String, type: Class<T>) = readJson(file(o), type)
+  @JvmStatic fun <T> readJsonFile(o: String, ref: TypeReference<T>): T = readJson(file(o), ref)
   @JvmStatic
   fun writeJson(file: File, o: Any) =
       file.apply {
@@ -120,7 +120,7 @@ object J {
         objectMap(this).writerWithDefaultPrettyPrinter().writeValue(this, o)
       }
   @JvmStatic fun writeJson(s: String, o: Any) = writeJson(file(s), o)
-  @JvmStatic fun file(vararg path: String): File = FileUtil.file(*path)
+  @JvmStatic fun file(vararg o: String): File = FileUtil.file(*o)
   @JvmStatic
   fun base58(id1: String, id2: String, vararg data: String): String =
       listOf(id1, id2, *data).run {
@@ -128,7 +128,7 @@ object J {
         base58(ids.toByteArray(UTF_8))
       }
 
-  @JvmStatic fun base58(data: ByteArray): String = Base58.encode(data)
+  @JvmStatic fun base58(o: ByteArray): String = Base58.encode(o)
 
   @JvmStatic fun objectId(): String = IdUtil.objectId()
 
@@ -141,17 +141,17 @@ object J {
 
   @JvmStatic fun date(): Date = DateUtil.date()
 
-  @JvmStatic fun date(date: Long): Date = DateUtil.date(date)
+  @JvmStatic fun date(o: Long): Date = DateUtil.date(o)
 
-  @JvmStatic fun date(date: TemporalAccessor): Date = DateUtil.date(date)
+  @JvmStatic fun date(o: TemporalAccessor): Date = DateUtil.date(o)
 
-  @JvmStatic fun ldt(date: Date) = date.ldt()
+  @JvmStatic fun ldt(o: Date) = o.ldt()
 
-  @JvmStatic fun ld(date: Date) = date.ld()
+  @JvmStatic fun ld(o: Date) = o.ld()
 
-  @JvmStatic fun lt(date: Date) = date.lt()
-  @JvmStatic fun isBlank(str: CharSequence) = StrUtil.isBlank(str)
-  @JvmStatic fun nonBlank(str: CharSequence) = !isBlank(str)
+  @JvmStatic fun lt(o: Date) = o.lt()
+  @JvmStatic fun isBlank(o: CharSequence) = StrUtil.isBlank(o)
+  @JvmStatic fun nonBlank(o: CharSequence) = !isBlank(o)
   @JvmStatic
   fun blankToDefault(str: CharSequence, defaultStr: String): String =
       StrUtil.blankToDefault(str, defaultStr)
@@ -159,25 +159,24 @@ object J {
   /**
    * 集合是否为空
    *
-   * @param collection 集合
+   * @param o 集合
    * @return 是否为空
    */
-  @JvmStatic fun isEmpty(collection: Collection<*>?) = CollUtil.isEmpty(collection)
-  @JvmStatic fun isEmpty(iterable: Iterable<*>?) = IterUtil.isEmpty(iterable)
-  @JvmStatic fun isEmpty(array: Array<*>?) = ArrayUtil.isEmpty(array)
+  @JvmStatic fun isEmpty(o: Collection<*>?) = CollUtil.isEmpty(o)
+  @JvmStatic fun isEmpty(o: Iterable<*>?) = IterUtil.isEmpty(o)
+  @JvmStatic fun isEmpty(o: Array<*>?) = ArrayUtil.isEmpty(o)
+  @JvmStatic fun nonEmpty(o: Collection<*>?) = CollUtil.isNotEmpty(o)
+  @JvmStatic fun nonEmpty(o: Iterable<*>?) = IterUtil.isNotEmpty(o)
+  @JvmStatic fun nonEmpty(o: Array<*>?) = ArrayUtil.isNotEmpty(o)
+  @JvmStatic fun <T> emptyToNull(o: Collection<T>?): Collection<T>? = if (nonEmpty(o)) o else null
+  @JvmStatic fun <T> emptyToNull(o: List<T>?): List<T>? = if (nonEmpty(o)) o else null
+  @JvmStatic fun <T> emptyToNull(o: Set<T>?): Set<T>? = if (nonEmpty(o)) o else null
+  @JvmStatic fun <T> emptyToNull(o: Array<T>?): Array<T>? = if (nonEmpty(o)) o else null
 
-  @JvmStatic fun nonEmpty(collection: Collection<*>?) = CollUtil.isNotEmpty(collection)
-  @JvmStatic fun nonEmpty(iterable: Iterable<*>?) = IterUtil.isNotEmpty(iterable)
-  @JvmStatic fun nonEmpty(array: Array<*>?) = ArrayUtil.isNotEmpty(array)
-  @JvmStatic fun <T> emptyToNull(list: List<T>?): List<T>? = if (nonEmpty(list)) list else null
-
-  @JvmStatic fun <T> emptyToNull(set: Set<T>?): Set<T>? = if (nonEmpty(set)) set else null
-
-  @JvmStatic fun <T> stream(iterable: Iterable<T>?) = stream(iterable, false)
+  @JvmStatic fun <T> stream(o: Iterable<T>?) = stream(o, false)
   @JvmStatic
-  fun <T> stream(iterable: Iterable<T>?, parallel: Boolean = false): Stream<T> =
-      if (IterUtil.isEmpty(iterable)) Stream.empty()
-      else StreamSupport.stream(iterable!!.spliterator(), parallel)
-  @JvmStatic fun sha256Hex(file: File) = file.sha256Hex()
-  @JvmStatic fun sm3Hex(file: File) = file.sm3Hex()
+  fun <T> stream(o: Iterable<T>?, parallel: Boolean = false): Stream<T> =
+      o?.run { StreamSupport.stream(spliterator(), parallel) } ?: Stream.empty()
+  @JvmStatic fun sha256Hex(o: File) = o.sha256Hex()
+  @JvmStatic fun sm3Hex(o: File) = o.sm3Hex()
 }
