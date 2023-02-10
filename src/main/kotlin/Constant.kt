@@ -45,7 +45,11 @@ fun File.writeJson(o: Any) {
   objectMap().writerWithDefaultPrettyPrinter().writeValue(this, o)
 }
 
+fun File.sha256Base58(): String = DigestUtil.sha256(this).base58()
+
 fun File.sha256Hex(): String = DigestUtil.sha256Hex(this)
+
+fun File.sm3Base58(): String = DigestUtil.digester("sm3").digest(this).base58()
 
 fun File.sm3Hex(): String = DigestUtil.digester("sm3").digestHex(this)
 

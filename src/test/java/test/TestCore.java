@@ -11,6 +11,7 @@ public class TestCore {
   @Test
   void testLocalIp() {
     assertFalse(J.localIp().isBlank());
+    assertFalse(J.localIp().isBlank());
   }
 
   @Test

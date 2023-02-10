@@ -33,7 +33,7 @@ object J {
       }
   @JvmStatic fun objectId(): String = IdUtil.objectId()
   @JvmStatic fun nanoId(): String = IdUtil.nanoId()
-  @JvmStatic fun password(password: String = "123456"): String = DigestUtil.bcrypt(password)
+  @JvmStatic fun password(o: String = "123456"): String = DigestUtil.bcrypt(o)
   @JvmStatic
   fun passwordCheck(password: String, hashed: String) = DigestUtil.bcryptCheck(password, hashed)
   @JvmStatic fun objectNode(): ObjectNode = JsonNodeFactory.instance.objectNode()
@@ -96,15 +96,18 @@ object J {
   @JvmStatic fun nonEmpty(o: Iterable<*>?) = IterUtil.isNotEmpty(o)
   @JvmStatic fun isNotEmpty(o: Array<*>?) = ArrayUtil.isNotEmpty(o)
   @JvmStatic fun nonEmpty(o: Array<*>?) = ArrayUtil.isNotEmpty(o)
+
+  @JvmStatic fun password(): String = password("123456")
+  @JvmStatic fun base58(o: ByteArray): String = o.base58()
+  @JvmStatic fun sha256Base58(o: File) = o.sha256Base58()
+  @JvmStatic fun sha256Hex(o: File) = o.sha256Hex()
+  @JvmStatic fun sm3Base58(o: File) = o.sm3Base58()
+  @JvmStatic fun sm3Hex(o: File) = o.sm3Hex()
+
   @JvmStatic fun <T> emptyToNull(o: Collection<T>?): Collection<T>? = if (nonEmpty(o)) o else null
   @JvmStatic fun <T> emptyToNull(o: List<T>?): List<T>? = if (nonEmpty(o)) o else null
   @JvmStatic fun <T> emptyToNull(o: Set<T>?): Set<T>? = if (nonEmpty(o)) o else null
   @JvmStatic fun <T> emptyToNull(o: Array<T>?): Array<T>? = if (nonEmpty(o)) o else null
-
-  @JvmStatic fun base58(o: ByteArray): String = o.base58()
-  @JvmStatic fun sha256Hex(o: File) = o.sha256Hex()
-  @JvmStatic fun sm3Hex(o: File) = o.sm3Hex()
-
   @JvmStatic
   fun base58(id1: String, id2: String, vararg data: String): String =
       listOf(id1, id2, *data).run {
