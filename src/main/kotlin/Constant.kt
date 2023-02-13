@@ -30,47 +30,32 @@ fun objectMap(o: String) =
       else -> MAPPER
     }
 
-fun File.mainName(): String = FileUtil.mainName(this)
-
-fun File.extName(): String = FileUtil.extName(this)
-
 fun File.objectMap() = objectMap(name)
-
+fun File.mainName(): String = FileUtil.mainName(this)
+fun File.extName(): String = FileUtil.extName(this)
 inline fun <reified T> File.readJson() = objectMap().readValue<T>(this)
-
 inline fun <reified T> File.inputCommand() = J.inputCommand(readJson<T>())
-
 fun File.writeJson(o: Any) {
   FileUtil.mkParentDirs(this)
   objectMap().writerWithDefaultPrettyPrinter().writeValue(this, o)
 }
-
-fun File.sha256Base58(): String = DigestUtil.sha256(this).base58()
-
 fun File.sha256Hex(): String = DigestUtil.sha256Hex(this)
-
+fun File.sha256Base58(): String = DigestUtil.sha256(this).base58()
+fun File.sm3Hex(): String = DigestUtil.digester("sm3").digestHex(this)
 fun File.sm3Base58(): String = DigestUtil.digester("sm3").digest(this).base58()
 
-fun File.sm3Hex(): String = DigestUtil.digester("sm3").digestHex(this)
-
 fun String.mainName(): String = FileUtil.mainName(this)
-
 fun String.extName(): String = FileUtil.extName(this)
-
 inline fun <reified T> String.readJson() = MAPPER.readValue<T>(this)
-
 inline fun <reified T> String.inputCommand() = J.inputCommand(readJson<T>())
+inline fun <reified T> String.readJsonFile() = J.file(this).readJson<T>()
 
 inline fun <reified T> ByteArray.readJson() = MAPPER.readValue<T>(this)
-
 inline fun <reified T> ByteArray.inputCommand() = J.inputCommand(readJson<T>())
-
 fun ByteArray.base58(): String = Base58.encode(this)
 
 fun Date.ldt(): LocalDateTime = DateUtil.toLocalDateTime(this)
-
 fun Date.ld(): LocalDate = ldt().toLocalDate()
-
 fun Date.lt(): LocalTime = ldt().toLocalTime()
 
 @JvmField
