@@ -76,11 +76,11 @@ object J {
   @JvmStatic fun ld(o: Date) = o.ld()
   @JvmStatic fun lt(o: Date) = o.lt()
 
-  @JvmStatic fun isBlank(o: CharSequence) = StrUtil.isBlank(o)
-  @JvmStatic fun nonBlank(o: CharSequence) = !isBlank(o)
+  @JvmStatic fun isBlank(o: CharSequence?) = StrUtil.isBlank(o)
+  @JvmStatic fun nonBlank(o: CharSequence?) = !isBlank(o)
   @JvmStatic
-  fun blankToDefault(o: CharSequence, str: String): String = StrUtil.blankToDefault(o, str)
-  @JvmStatic fun blankToDefault(o: CharSequence): String = blankToDefault(o, StrUtil.EMPTY)
+  fun blankToDefault(o: CharSequence?, str: String): String = StrUtil.blankToDefault(o, str)
+  @JvmStatic fun blankToDefault(o: CharSequence?): String = blankToDefault(o, StrUtil.EMPTY)
 
   @JvmStatic fun <T> stream(o: Iterable<T>?) = stream(o, false)
   @JvmStatic
