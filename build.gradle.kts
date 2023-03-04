@@ -1,9 +1,9 @@
 plugins {
-  idea
+  id("idea")
+  id("java-library")
+  id("maven-publish")
   kotlin("jvm") version "1.8.10"
   id("com.diffplug.spotless")
-  `java-library`
-  `maven-publish`
 }
 
 group = "com.gitee.ixtf"
