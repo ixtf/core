@@ -4,7 +4,12 @@ pluginManagement {
     mavenCentral()
     gradlePluginPortal()
   }
-  plugins { id("com.diffplug.spotless") version "6.11.0" }
+  val kotlinVersion: String by settings
+  val spotlessVersion: String by settings
+  plugins {
+    kotlin("jvm") version kotlinVersion
+    id("com.diffplug.spotless") version spotlessVersion
+  }
 }
 
 rootProject.name = "core"

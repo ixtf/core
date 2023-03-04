@@ -1,9 +1,8 @@
 plugins {
-  idea
-  kotlin("jvm") version "1.8.10"
-  id("com.diffplug.spotless")
-  `java-library`
+  java
+  kotlin("jvm")
   `maven-publish`
+  id("com.diffplug.spotless")
 }
 
 group = "com.gitee.ixtf"
@@ -29,8 +28,10 @@ repositories {
   maven("https://maven.geo-solutions.it")
 }
 
+val bomVersion: String by properties
+
 dependencies {
-  api(platform("com.gitee.ixtf:bom:${properties["bomVersion"]}"))
+  api(platform("com.gitee.ixtf:bom:$bomVersion"))
   api("cn.hutool:hutool-core")
   api("cn.hutool:hutool-system")
   api("cn.hutool:hutool-crypto")
@@ -55,6 +56,9 @@ dependencies {
 publishing {
   publications {
     create<MavenPublication>("mavenJava") {
+      group = "com.gitee.ixtf"
+      artifactId = "core"
+      version = "1.0.0"
       from(components["java"])
       //      val archives by configurations
       //      setArtifacts(archives.artifacts)
